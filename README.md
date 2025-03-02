@@ -1,1 +1,2 @@
 # E-Gift-Card-System-
+E-Gift Card System is a platform where users can buy gift cards created by the admin and use them to pay merchants. Merchants receive these gift cards as payments and can later convert them into balance. The system does not allow direct money transactions—only payments via gift cards. Users can search for merchants by their ID and send gift cards to them. Merchants can view all received gift cards in their dashboard. The system also allows both users and merchants to delete their accounts if needed.
