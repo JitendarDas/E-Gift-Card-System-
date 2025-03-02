@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <style>
+            .card-custom {
+                box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+                padding: 20px;
+            }
+
+            body {
+                background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: 90% auto; 
+            background-position: center; 
+            background-attachment: fixed;
+                font-family: Arial, sans-serif;
+                background-color: #f8f9fa;
+                padding: 20px;
+            }
+
+            .container {
+                width: 60%;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 30px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+            }
+
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                color: #555;
+            }
+
+            input[type="text"], input[type="date"], select {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+            }
+
+            button {
+                padding: 10px 15px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            .btn-dark {
+                padding: 10px 15px;
+                background-color: #333;
+                color: white;
+                text-decoration: none;
+                display: inline-block;
+                margin-top: 10px;
+                border-radius: 5px;
+            }
+
+            .btn-dark:hover {
+                background-color: #555;
+            }
+
+            .message {
+                color: green;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Add Gift Card</h1>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="message">
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form action="/add_gift_card" method="POST">
+                <label for="card_value">Card Value</label>
+                <input type="text" id="card_value" name="card_value" required><br>
+
+                <label for="expiration_date">Expiration Date:</label>
+                <input type="date" id="expiration_date" name="expiration_date" required><br>
+
+                <!-- Status is not needed to be set manually, so it is hidden or not included -->
+                <input type="hidden" name="status" value="available">
+
+                <button type="submit">Submit</button>
+            </form>
+
+            <a href="/gift_cards" class="btn btn-dark">View Gift Cards</a>
+        </div>
+    </body>
+</html>

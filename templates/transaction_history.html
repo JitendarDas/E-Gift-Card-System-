@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: 90% auto; 
+            background-position: center; 
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Transaction History</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Card ID</th>
+                    <th>Card Value</th>
+                    <th>Purchase Date</th>
+                    <th>Expires At</th>
+                    {% if user_type == 'user' %}
+                        <th>Merchant Name</th>
+                    {% elif user_type == 'merchant' %}
+                        <th>User Name</th>
+                    {% elif user_type == 'admin' %}
+                        <th>User Name</th>
+                        <th>Merchant Name</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.card_id }}</td>
+                        <td>{{ transaction.card_value }}</td>
+                        <td>{{ transaction.purchase_date }}</td>
+                        <td>{{ transaction.expires_at }}</td>
+                        {% if user_type == 'user' %}
+                            <td>{{ transaction.merchant_name or 'N/A' }}</td>
+                        {% elif user_type == 'merchant' %}
+                            <td>{{ transaction.user_name or 'N/A' }}</td>
+                        {% elif user_type == 'admin' %}
+                            <td>{{ transaction.user_name or 'N/A' }}</td>
+                            <td>{{ transaction.merchant_name or 'N/A' }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="/dashboard" class="back-link">Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

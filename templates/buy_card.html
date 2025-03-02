@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Gift Cards</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: 90% auto; 
+            background-position: center; 
+            background-attachment: fixed;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #26c6da;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #26c6da;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e0f7fa;
+        }
+        button {
+            background-color: #26c6da;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #00bcd4;
+        }
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .message {
+                color: green;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+    </style>
+</head>
+<body>
+    <h1>Available Gift Cards</h1>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="message">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="/buy_card" method="POST">
+        {% if cards %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Card ID</th>
+                        <th>Card Value</th>
+                        <th>Creation Date</th>
+                        <th>Expiration Date</th>
+                        <th>Status</th>
+                        <th>Buy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for card in cards %}
+                        <tr>
+                            <td>{{ card['card_id'] }}</td>
+                            <td>Rs {{ card['card_value'] }}</td>
+                            <td>{{ card['created_at'] }}</td>
+                            <td>{{ card['expires_at'] }}</td>
+                            <td>{{ card['status'] }}</td>
+                            <td>
+                                <button type="submit" name="card_id" value="{{ card['card_id'] }}">Buy</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No available gift cards at the moment.</p>
+        {% endif %}
+    </form>
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="/dashboard">
+            <button type="button" style="background-color: #041113; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: background-color 0.3s ease;">
+                Back
+            </button>
+        </a>
+    </div>
+</body>
+</html>

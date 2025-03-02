@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    /* Center the form container in the middle of the screen */
+    body {
+            background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: 90% auto; 
+            background-position: center; 
+            background-attachment: fixed; 
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+    }
+
+    .card-custom {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      transform: translateY(-30px);
+    }
+
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .btn-block {
+      margin-bottom: 10px;
+    }
+
+    .alert-danger {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>SignIn</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="card card-custom">
+    <div class="card-body">
+      <form action="/signin" method="POST">
+     
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" class="form-control" required>
+        </div>
+
+        <button type="submit" name="signin_type" value="user" class="btn btn-dark btn-block">User SignIn</button>
+        <button type="submit" name="signin_type" value="merchant" class="btn btn-dark btn-block">Merchant SignIn</button>
+        <button type="submit" name="signin_type" value="admin" class="btn btn-dark btn-block">Admin SignIn</button>
+        <a href="/signup" class="btn btn-dark btn-block" >Sign Up</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

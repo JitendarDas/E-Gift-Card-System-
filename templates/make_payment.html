@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Payment</title>
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: 90% auto;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            color: white;
+        }
+        h1 {
+            color: #26c6da;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7); /* Black with slight transparency */
+            color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 60%;
+            margin: auto;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+        select {
+            padding: 10px;
+            width: 100%;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            color: #333;
+        }
+        button {
+            background-color: #26c6da;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #00bcd4;
+        }
+        .btn-dark {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-dark:hover {
+            background-color: #333;
+        }
+        .message {
+                color: green;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+    </style>
+</head>
+<body>
+    <h1>Make Payment</h1>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="message">
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  {% endwith %}
+
+    <div class="container">
+        <form action="/make_payment" method="POST">
+            <div class="form-group">
+                <label for="card_id">Select Gift Card:</label>
+                <select name="card_id" id="card_id" required>
+                    {% for card in cards %}
+                        <option value="{{ card['card_id'] }}">Rs {{ card['card_value'] }} - Expiry: {{ card['expires_at'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="merchant_id">Select Merchant:</label>
+                <select name="merchant_id" id="merchant_id" required>
+                    {% for merchant in merchants %}
+                        <option value="{{ merchant['merchant_id'] }}">{{ merchant['merchant_name'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Submit Payment</button>
+        </form>
+
+        <div style="margin-top: 15px;">
+            <a href="/dashboard" class="btn-dark">Back</a>
+        </div>
+    </div>
+</body>
+</html>

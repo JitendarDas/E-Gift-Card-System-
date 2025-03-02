@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Gift Cards</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: 90% auto; 
+            background-position: center; 
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            color: #333;
+        }
+        h2 {
+            text-align: center;
+            color: #26c6da;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #26c6da;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e0f7fa;
+        }
+        button {
+            background-color: #26c6da;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #00bcd4;
+        }
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #26c6da;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Your Gift Cards</h2>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% if cards %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Card ID</th>
+                    <th>Card Value</th>
+                    <th>Status</th>
+                    <th>Convert</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for card in cards %}
+                    <tr>
+                        <td>{{ card['card_id'] }}</td>
+                        <td>Rs {{ card['card_value'] }}</td>
+                        <td>{{ card['status'] }}</td>
+                        <td>
+                            {% if card['status'] == 'active' %}
+                                <form action="/convert_amt" method="POST">
+                                    <input type="hidden" name="card_id" value="{{ card['card_id'] }}">
+                                    <button type="submit">Convert to Balance</button>
+                                </form>
+                            {% else %}
+                                <span>Already Redeemed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No gift cards available</p>
+    {% endif %}
+    
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

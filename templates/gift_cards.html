@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Gift Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{{ url_for('static', filename='gift_card.jpg') }}");
+            background-size: cover; 
+            background-position: center; 
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            width: 60%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5D5C61;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            color: #555;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .flash-message {
+            background-color: #f4f4f9;
+            color: #28a745;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #28a745;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .btn-dark {
+            padding: 8px 12px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn-dark:hover {
+            background-color: #555;
+        }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Available Gift Cards</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if cards %}
+            <form action="/update_status" method="POST">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Card ID</th>
+                            <th>Card Value</th>
+                            <th>Creation</th>
+                            <th>Expiration</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for card in cards %}
+                            <tr>
+                                <td>{{ card['card_id'] }}</td>
+                                <td>{{ card['card_value'] }}</td>
+                                <td>{{ card['created_at'] }}</td>
+                                <td>{{ card['expires_at'] }}</td>
+                                <td>{{ card['status'] }}</td>
+                                <td>
+                                    <select name="status_{{ card['card_id'] }}">
+                                        <option value="available" {% if card['status'] == 'available' %}selected{% endif %}>Available</option>
+                                        <option value="sold" {% if card['status'] == 'sold' %}selected{% endif %}>Sold</option>
+                                        <option value="expired" {% if card['status'] == 'expired' %}selected{% endif %}>Expired</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="text-align: center;">
+                    <button type="submit">Update Status</button>
+                </div>
+            </form>
+        {% else %}
+            <p>No available gift cards at the moment</p>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/dashboard" class="btn-dark">Back</a>
+        </div>
+    </div>
+</body>
+</html>
